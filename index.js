@@ -7,40 +7,35 @@ import companyRoutes from "./routes/company.Routes.js";
 import jobRoutes from "./routes/job.Routes.js";
 import userRoutes from "./routes/userRoutes.js";
 import connectDB from "./utils/db.js";
+
 dotenv.config({});
 
 const app = express();
-  
-//middleware
+
+// Middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended:true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 const corsOptions = {
-    origin: 'http://localhost:5173',
-    credentials:true,
-}
+    origin: process.env.FRONTEND_URL || '*', // Use the deployed frontend URL for production
+    credentials: true,
+};
 app.use(cors(corsOptions));
-
-
-
 
 const PORT = process.env.PORT || 3000;
 
-
-
-//api's
+// API routes
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/company", companyRoutes);
 app.use("/api/v1/job", jobRoutes);
 app.use("/api/v1/application", applicationRoutes);
 
-
-
-
-
-app.listen(PORT,()=>{
+// Start the server
+app.listen(PORT, () => {
     connectDB();
     console.log(`Server is running on port ${PORT}`);
-})
+});
 
-app.timeout = 30000; // Set the timeout to 30 seconds
+// Optional: Set timeout to 30 seconds
+app.timeout = 30000;
